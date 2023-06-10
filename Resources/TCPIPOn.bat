@@ -34,3 +34,4 @@ Enable-NetAdapterQos -Name "*";^
 		reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v "UseZeroBroadcast" /d "0" /t REG_DWORD /f
 		reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v "DeadGWDetectDefault" /d "1" /t REG_DWORD /f
 	)
+start /B cmd /c "ipconfig /release & ipconfig /renew" >nul 2>&1

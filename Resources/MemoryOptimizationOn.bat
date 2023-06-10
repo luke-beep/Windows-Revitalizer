@@ -49,7 +49,7 @@ if exist "%SYSTEMROOT%\System32\fsutil.exe" (
 	REM Disable NTFS compression
 	fsutil behavior set disablecompression 1
 	REM Enable Trim
-	fsutil behavior set disabledeletenotify 0
+	fsutil behavior set disabledeletenotify %SystemDrive% 0
 	REM Disable ReFS v2 auto tiering logic for tiered volumes. https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/fsutil-behavior https://forums.veeam.com/veeam-backup-replication-f2/refs-strange-performance-issues-t65280.html
 	fsutil behavior set disablewriteautotiering 1
 	REM Set the NTFS quota report interval to 90 minutes.

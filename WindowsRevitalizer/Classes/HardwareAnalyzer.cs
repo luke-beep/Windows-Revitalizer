@@ -1,4 +1,5 @@
-﻿using Spectre.Console;
+﻿using Microsoft.Win32;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
@@ -15,7 +16,8 @@ namespace WindowsRevitalizer.Classes
     {
         public void Execute()
         {
-            HardwareLoader HardwareLoader = new HardwareLoader();
+            HardwareLoader HardwareLoader = new();
+            BackHelper backHelper = new();
 
             List<CPU> cpus = HardwareLoader.GetCPUs();
             VirtualMemory vm = HardwareLoader.GetVM();
@@ -24,19 +26,19 @@ namespace WindowsRevitalizer.Classes
             List<Disk> disks = HardwareLoader.GetDisks();
             List<GPU> gpus = HardwareLoader.GetGPUs();
             List<AudioDevice> audioDevices = HardwareLoader.GetAudioDevices();
-            List<Volume> Volumes = new List<Volume>();
-            List<Volume> Opticals = new List<Volume>();
-            List<Volume> Removables = new List<Volume>();
-            List<NetworkDevice> PhysicalAdapters = new List<NetworkDevice>();
-            List<NetworkDevice> VirtualAdapters = new List<NetworkDevice>();
-            List<Keyboard> Keyboards = new List<Keyboard>();
-            List<PointingDevice> PointingDevices = new List<PointingDevice>();
+            List<Volume> Volumes = new();
+            List<Volume> Opticals = new();
+            List<Volume> Removables = new();
+            List<NetworkDevice> PhysicalAdapters = new();
+            List<NetworkDevice> VirtualAdapters = new();
+            List<Keyboard> Keyboards = new();
+            List<PointingDevice> PointingDevices = new();
             
 
             var CPU = new Tree("");
             foreach (CPU cpu in cpus)
             {
-                var CPURoot = CPU.AddNode(new Table()
+                _ = CPU.AddNode(new Table()
                  .Title(cpu.Name)
                  .AddColumn("Name")
                  .AddColumn("Value")
@@ -48,14 +50,14 @@ namespace WindowsRevitalizer.Classes
                  .AddRow("Data Execution Prevention", cpu.DataExecutionPrevention)
                  .AddRow("Stepping", cpu.Stepping)
                  .AddRow("Revision", cpu.Revision)
-                 
+
                  .Collapse()
                  );
             }
             var RAM = new Tree("");
             foreach (RAM ram in ramModules)
             {
-                var RAMRoot = RAM.AddNode(new Table()
+                _ = RAM.AddNode(new Table()
                    .Title(ram.Manufacturer)
                    .AddColumn("Name")
                    .AddColumn("Value")
@@ -64,7 +66,7 @@ namespace WindowsRevitalizer.Classes
                    .AddRow("Memory Type", ram.MemoryType)
                    .AddRow("Speed (MT/s)", ram.Speed.ToString())
                    .AddRow("RAM Bank (Module or Bar)", ram.BankLabel)
-                   
+
                    .Collapse()
                   );
             }
@@ -85,7 +87,7 @@ namespace WindowsRevitalizer.Classes
 
             foreach (GPU gpu in gpus)
             {
-                var GPURoot = GPU.AddNode(new Table()
+                _ = GPU.AddNode(new Table()
                 .Title(gpu.Name)
                 .AddColumn("Name")
                 .AddColumn("Value")
@@ -95,7 +97,7 @@ namespace WindowsRevitalizer.Classes
                 .AddRow("Refresh Rate (Hz)", gpu.RefreshRate.ToString())
                 .AddRow("DAC Type (Obsolete)", gpu.DACType)
                 .AddRow("VRAM Type (eg. GDDR6)", gpu.VideoMemoryType)
-                
+
                 .Collapse()
                 );
             }
@@ -258,7 +260,24 @@ namespace WindowsRevitalizer.Classes
             AnsiConsole.Write(_physicalAdapters);
             Console.WriteLine("\n");
             AnsiConsole.Write(_virtualAdapters);
-            Console.ReadLine();
+            Console.WriteLine("\n");
+            var accept = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                .HighlightStyle(Color.Red)
+                .PageSize(10)
+                .Title("[red]Go back[/]?")
+                .AddChoices(new[]
+                {
+                "Yes", "No"
+                }));
+            if (accept == "Yes")
+            {
+                backHelper.Back();
+            }
+            else
+            {
+                Console.ReadLine();
+            }
         }
     }
 }

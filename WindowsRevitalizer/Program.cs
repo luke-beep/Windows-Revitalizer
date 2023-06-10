@@ -17,9 +17,6 @@ namespace WindowsRevitalizer
                 logger.ClearLogFile();
                 Menu menu = new();
                 menu.StartMenu();
-                //ICommand hardwareModules = new HardwareAnalyzer();
-                //hardwareModules.Execute();
-                
             }
             else
             {

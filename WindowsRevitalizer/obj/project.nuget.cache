@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mxrg1Hlr+h+qkB1O0JKO7C3OG5hf4d3yBX2hFMtj2H7Z6P/AKokcm6HUtBApU3QXqnimcrFxCnbyeuBjP4V2mA==",
+  "dgSpecHash": "UFbOTBsBGOuTB+Lhgz9INQkPp5jAQWORQsigaHk44VbXYlkYVxG277jaYS5erUIRqoCP7G4BMBWVUA1Tn6vtCA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\lukeh\\source\\repos\\WindowsRevitalizer\\WindowsRevitalizer\\WindowsRevitalizer.csproj",
+  "projectFilePath": "C:\\Users\\lukeh\\source\\repos\\WRevitalizer\\Windows-Revitalizer\\WindowsRevitalizer\\WindowsRevitalizer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lukeh\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\lukeh\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",

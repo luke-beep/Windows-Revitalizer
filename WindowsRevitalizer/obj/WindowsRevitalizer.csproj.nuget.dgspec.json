@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lukeh\\source\\repos\\WindowsRevitalizer\\WindowsRevitalizer\\WindowsRevitalizer.csproj": {}
+    "C:\\Users\\lukeh\\source\\repos\\WRevitalizer\\Windows-Revitalizer\\WindowsRevitalizer\\WindowsRevitalizer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lukeh\\source\\repos\\WindowsRevitalizer\\WindowsRevitalizer\\WindowsRevitalizer.csproj": {
+    "C:\\Users\\lukeh\\source\\repos\\WRevitalizer\\Windows-Revitalizer\\WindowsRevitalizer\\WindowsRevitalizer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lukeh\\source\\repos\\WindowsRevitalizer\\WindowsRevitalizer\\WindowsRevitalizer.csproj",
+        "projectUniqueName": "C:\\Users\\lukeh\\source\\repos\\WRevitalizer\\Windows-Revitalizer\\WindowsRevitalizer\\WindowsRevitalizer.csproj",
         "projectName": "WindowsRevitalizer",
-        "projectPath": "C:\\Users\\lukeh\\source\\repos\\WindowsRevitalizer\\WindowsRevitalizer\\WindowsRevitalizer.csproj",
+        "projectPath": "C:\\Users\\lukeh\\source\\repos\\WRevitalizer\\Windows-Revitalizer\\WindowsRevitalizer\\WindowsRevitalizer.csproj",
         "packagesPath": "C:\\Users\\lukeh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lukeh\\source\\repos\\WindowsRevitalizer\\WindowsRevitalizer\\obj\\",
+        "outputPath": "C:\\Users\\lukeh\\source\\repos\\WRevitalizer\\Windows-Revitalizer\\WindowsRevitalizer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\lukeh\\AppData\\Roaming\\NuGet\\NuGet.Config",

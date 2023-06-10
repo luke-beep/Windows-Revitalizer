@@ -170,13 +170,13 @@ namespace WindowsRevitalizer.Classes.Helpers
 
         public string ToString(string format, IFormatProvider provider, bool useBinaryByte = false)
         {
-            if (!format.Contains("#") && !format.Contains("0"))
+            if (!format.Contains('#') && !format.Contains('0'))
                 format = "0.## " + format;
 
-            if (provider == null) provider = CultureInfo.CurrentCulture;
+            provider ??= CultureInfo.CurrentCulture;
 
-            Func<string, bool> has = s => format.IndexOf(s, StringComparison.CurrentCultureIgnoreCase) != -1;
-            Func<double, string> output = n => n.ToString(format, provider);
+            bool has(string s) => format.IndexOf(s, StringComparison.CurrentCultureIgnoreCase) != -1;
+            string output(double n) => n.ToString(format, provider);
 
             // Binary
             if (has("PiB"))
@@ -219,51 +219,53 @@ namespace WindowsRevitalizer.Classes.Helpers
             }
         }
 
-        public override bool Equals(object value)
+#pragma warning disable CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
+        public override readonly bool Equals(object value)
+#pragma warning restore CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
         {
             if (value == null)
                 return false;
 
             ByteSize other;
-            if (value is ByteSize)
-                other = (ByteSize)value;
+            if (value is ByteSize size)
+                other = size;
             else
                 return false;
 
             return Equals(other);
         }
 
-        public bool Equals(ByteSize value)
+        public readonly bool Equals(ByteSize value)
         {
             return this.Bits == value.Bits;
         }
 
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             return this.Bits.GetHashCode();
         }
 
-        public int CompareTo(ByteSize other)
+        public readonly int CompareTo(ByteSize other)
         {
             return this.Bits.CompareTo(other.Bits);
         }
 
-        public ByteSize Add(ByteSize bs)
+        public readonly ByteSize Add(ByteSize bs)
         {
             return new ByteSize(this.Bytes + bs.Bytes);
         }
 
-        public ByteSize AddBits(long value)
+        public readonly ByteSize AddBits(long value)
         {
             return this + FromBits(value);
         }
 
-        public ByteSize AddBytes(double value)
+        public readonly ByteSize AddBytes(double value)
         {
             return this + ByteSize.FromBytes(value);
         }
 
-        public ByteSize Subtract(ByteSize bs)
+        public readonly ByteSize Subtract(ByteSize bs)
         {
             return new ByteSize(this.Bytes - bs.Bytes);
         }
@@ -337,18 +339,19 @@ namespace WindowsRevitalizer.Classes.Helpers
 
             // Arg checking
             if (string.IsNullOrWhiteSpace(s))
-                throw new ArgumentNullException("s", "String is null or whitespace");
+                throw new ArgumentNullException(nameof(s), "String is null or whitespace");
 
             // Get the index of the first non-digit character
             s = s.TrimStart(); // Protect against leading spaces
 
-            var num = 0;
             var found = false;
 
             var numberFormatInfo = NumberFormatInfo.GetInstance(formatProvider);
             var decimalSeparator = Convert.ToChar(numberFormatInfo.NumberDecimalSeparator);
             var groupSeparator = Convert.ToChar(numberFormatInfo.NumberGroupSeparator);
 
+
+            int num;
             // Pick first non-digit number
             for (num = 0; num < s.Length; num++)
                 if (!(char.IsDigit(s[num]) || s[num] == decimalSeparator || s[num] == groupSeparator))
@@ -363,12 +366,11 @@ namespace WindowsRevitalizer.Classes.Helpers
             int lastNumber = num;
 
             // Cut the input string in half
-            string numberPart = s.Substring(0, lastNumber).Trim();
-            string sizePart = s.Substring(lastNumber, s.Length - lastNumber).Trim();
+            string numberPart = s[..lastNumber].Trim();
+            string sizePart = s[lastNumber..].Trim();
 
             // Get the numeric part
-            double number;
-            if (!double.TryParse(numberPart, numberStyles, formatProvider, out number))
+            if (!double.TryParse(numberPart, numberStyles, formatProvider, out double number))
                 throw new FormatException($"No number found in value '{s}'.");
 
             // Get the magnitude part
@@ -384,43 +386,22 @@ namespace WindowsRevitalizer.Classes.Helpers
                     return FromBytes(number);
             }
 
-            switch (sizePart.ToLowerInvariant())
+            return sizePart.ToLowerInvariant() switch
             {
                 // Binary
-                case "kib":
-                    return FromKibiBytes(number);
-
-                case "mib":
-                    return FromMebiBytes(number);
-
-                case "gib":
-                    return FromGibiBytes(number);
-
-                case "tib":
-                    return FromTebiBytes(number);
-
-                case "pib":
-                    return FromPebiBytes(number);
-
+                "kib" => FromKibiBytes(number),
+                "mib" => FromMebiBytes(number),
+                "gib" => FromGibiBytes(number),
+                "tib" => FromTebiBytes(number),
+                "pib" => FromPebiBytes(number),
                 // Decimal
-                case "kb":
-                    return FromKiloBytes(number);
-
-                case "mb":
-                    return FromMegaBytes(number);
-
-                case "gb":
-                    return FromGigaBytes(number);
-
-                case "tb":
-                    return FromTeraBytes(number);
-
-                case "pb":
-                    return FromPetaBytes(number);
-
-                default:
-                    throw new FormatException($"Bytes of magnitude '{sizePart}' is not supported.");
-            }
+                "kb" => FromKiloBytes(number),
+                "mb" => FromMegaBytes(number),
+                "gb" => FromGigaBytes(number),
+                "tb" => FromTeraBytes(number),
+                "pb" => FromPetaBytes(number),
+                _ => throw new FormatException($"Bytes of magnitude '{sizePart}' is not supported."),
+            };
         }
 
         public static bool TryParse(string s, out ByteSize result)

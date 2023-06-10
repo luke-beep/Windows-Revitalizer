@@ -1,4 +1,5 @@
-﻿using Spectre.Console;
+﻿using Microsoft.Win32;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,13 @@ namespace WindowsRevitalizer.Classes
     {
         public void StartMenu()
         {
-            
-            BackHelper back = new BackHelper();
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\WindowsRevitalizer");
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+            BackHelper back = new();
             ILogger logger = new FileLoggerHelper(@$"C:\WindowsRevitalizer\{DateTime.Today:yyyy-MM-dd}.txt");
-            OutputLoggerHelper outputLogger = new OutputLoggerHelper(logger);
-            ConsolePropertiesHelper properties = new ConsolePropertiesHelper();
+            OutputLoggerHelper outputLogger = new(logger);
+            ConsolePropertiesHelper properties = new();
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
             Console.SetOut(outputLogger);
@@ -35,12 +38,17 @@ namespace WindowsRevitalizer.Classes
                     Console.Clear();
                 });
 
+            if (key == null)
+            {
+                ICommand credit = new Credit();
+                credit.Execute();
+            }
+
             AnsiConsole.Write(new FigletText("Windows Revitalizer\n")
                 .Centered()
                 .Color(Color.Red));
-
-
-            List<ICommand> commands = new List<ICommand>
+            
+            List<ICommand> commands = new()
             {
                 new DISM(),
                 new SFC(),
@@ -98,7 +106,7 @@ namespace WindowsRevitalizer.Classes
                     .AddChoices(new[] {
                         "Run the Deployment Image Servicing and Management (DISM) tool",
                         "Run the System File Checker (SFC) tool",
-                        "Debloat",
+                        "Debloat (Not Done)",
                         "SvcHostSplitThreshold | On",
                         "SvcHostSplitThreshold | Off",
                         "CSRSS High Priority | On",

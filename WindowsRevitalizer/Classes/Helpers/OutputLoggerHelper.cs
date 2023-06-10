@@ -24,7 +24,9 @@ namespace WindowsRevitalizer.Classes.Helpers
             originalOutput.Write(value);
         }
 
+#pragma warning disable CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
         public override void Write(string value)
+#pragma warning restore CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
         {
             logger.Log(value);
             originalOutput.Write(value);
